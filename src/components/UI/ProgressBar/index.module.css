@@ -1,0 +1,35 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progressBarContainer {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressBar {
+  height: 6px;
+  background-color: #4338ca;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 10px;
+  padding-right: 5px;
+}
+
+.progressBarText {
+  color: #333333;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.wrap h3 {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #525252;
+}

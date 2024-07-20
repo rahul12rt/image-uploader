@@ -1,0 +1,104 @@
+.card {
+  max-width: 768px;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  overflow: hidden;
+  margin: 0px 20px;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.coverIcon {
+  align-self: stretch;
+  height: 176px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.info {
+  padding: 10px 32px 32px 32px;
+  position: relative;
+}
+
+.name {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 600;
+  margin: 24px 0px;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.details h2 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.details span {
+  color: #525252;
+  padding-right: 8px;
+}
+
+.avatar {
+  width: 160px;
+  height: 160px;
+  box-shadow: 0 0 0 6px white;
+  background: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: -110px;
+}
+
+.avatar img {
+  display: block;
+  width: 100%;
+  height: -webkit-fill-available;
+  border-radius: 50%;
+}
+.occupation,
+.flow {
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .avatar {
+    width: 96px;
+    height: 96px;
+    top: -58px;
+  }
+  .info {
+    padding: 0px 16px 32px 16px;
+  }
+  .name {
+    font-size: 24px;
+    line-height: 32px;
+    margin: 24px 0px;
+  }
+
+  .details h2 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  .occupation,
+  .details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

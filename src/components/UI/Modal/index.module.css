@@ -1,0 +1,31 @@
+.profileCropContainer {
+  position: relative;
+}
+
+.cropperContainer {
+  overflow: hidden;
+  position: relative;
+  height: 290px;
+  width: 100%;
+}
+
+.cropperContainer div {
+  height: 100%;
+}
+
+.cropperContainer img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.buttonWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.buttonWrap button {
+  width: 100%;
+}
