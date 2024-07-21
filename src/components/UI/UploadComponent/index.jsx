@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styles from "./index.module.css";
-import ProgressBar from "../ProgressBar";
-import Checkbox from "../CheckBox";
 import PrimaryButton from "../Button/primary";
 import ProfileCrop from "../Modal";
+import InfoCard from "../Card/infoCard";
 
 const UploadComponent = ({
   handleModal,
@@ -27,7 +26,7 @@ const UploadComponent = ({
     handleModal();
   };
 
-  const simulateProgress = (fileIndex) => {
+  const simulateProgress = useCallback((fileIndex) => {
     const intervalId = setInterval(() => {
       setFiles((prevFiles) => {
         const newFiles = [...prevFiles];
@@ -45,7 +44,7 @@ const UploadComponent = ({
                 );
                 return updatedFiles;
               });
-            }, 450);
+            }, 1000);
             return newFiles;
           }
         }
@@ -53,7 +52,7 @@ const UploadComponent = ({
       });
     }, 350);
     return intervalId;
-  };
+  }, []);
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -85,7 +84,7 @@ const UploadComponent = ({
         return updatedFiles;
       });
     },
-    [files]
+    [setErrorToast, setFiles, simulateProgress]
   );
 
   useEffect(() => {
@@ -116,7 +115,7 @@ const UploadComponent = ({
         newFiles.splice(index, 1);
         return newFiles;
       }
-      return prevFiles; // Return previous state if file is not found
+      return prevFiles;
     });
     if (selectedFileIndex === index) {
       setSelectedFileIndex(null);
@@ -128,7 +127,7 @@ const UploadComponent = ({
   };
 
   const handleCropComplete = (croppedImageUrl) => {
-    if (isCropMode == "crop") {
+    if (isCropMode === "crop") {
       handleModal();
       setFiles((prevFiles) => {
         const updatedFiles = [...prevFiles];
@@ -139,7 +138,6 @@ const UploadComponent = ({
       });
     } else {
       setProfile(croppedImageUrl);
-      setConfirmation(true);
     }
   };
 
@@ -147,7 +145,7 @@ const UploadComponent = ({
 
   const handleSelectImage = () => {
     setIsCropMode("update");
-    setImageSrc(files[selectedFileIndex].preview);
+    setImageSrc(files[selectedFileIndex]);
     setIsModalOpen(true);
     handleModal();
   };
@@ -184,76 +182,15 @@ const UploadComponent = ({
         )}
       </div>
 
-      <div className={`${files.length > 2 && styles.wrap}`}>
-        {files.map((fileObj, index) => (
-          <div key={index} className={styles.profileContainer}>
-            <div className={styles.avatar}>
-              <img src={fileObj.preview} alt="avatar" />
-            </div>
-            <div className={styles.details}>
-              <div>
-                <h3>{fileObj.file.name}</h3>
-                <p>{(fileObj.file.size / 1024).toFixed(2)} KB</p>
-                {fileObj.showSuccess ? (
-                  <img
-                    src="/images/icons/close.svg"
-                    className={styles.closeIcon}
-                    alt="Close"
-                    onClick={() => handleRemoveFile(index)}
-                  />
-                ) : (
-                  <div className={styles.checkContainer}>
-                    <Checkbox
-                      checked={selectedFileIndex === index}
-                      onChange={() => handleCheckboxChange(index)}
-                    />
-                  </div>
-                )}
-              </div>
-              {fileObj.progress === 100 ? (
-                fileObj.showSuccess ? (
-                  <div className={styles.successUpload}>
-                    <img src="/images/icons/greenCheck.svg" alt="Check" />
-                    <h6>Upload success!</h6>
-                  </div>
-                ) : (
-                  <div className={styles.actions}>
-                    {files.length > 1 && (
-                      <>
-                        <div
-                          className={styles.cropImage}
-                          onClick={() =>
-                            showModal(fileObj.preview, index, "crop")
-                          }
-                        >
-                          <img src="/images/icons/crop.svg" alt="Crop" />
-                          <h6>Crop image</h6>
-                        </div>
-                        <div
-                          className="dot"
-                          style={{ background: "#525252" }}
-                        />
-                      </>
-                    )}
+      <InfoCard
+        files={files}
+        handleRemoveFile={handleRemoveFile}
+        handleCheckboxChange={handleCheckboxChange}
+        showModal={showModal}
+        selectedFileIndex={selectedFileIndex}
+      />
 
-                    <div
-                      className={styles.deleteImage}
-                      onClick={() => handleRemoveFile(index)}
-                    >
-                      <img src="/images/icons/delete.svg" alt="Delete" />
-                      <h6>Delete</h6>
-                    </div>
-                  </div>
-                )
-              ) : (
-                <ProgressBar progress={fileObj.progress} />
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {files.length > 0 && (
+      {files?.length > 0 && (
         <div className={styles.buttonWrap}>
           <PrimaryButton
             name={"Cancel"}
@@ -275,6 +212,7 @@ const UploadComponent = ({
         onCropComplete={handleCropComplete}
         handleModal={handleModal}
         files={files}
+        isCropMode={isCropMode}
         setConfirmation={setConfirmation}
       />
     </>

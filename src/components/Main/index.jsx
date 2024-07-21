@@ -26,11 +26,7 @@ const Main = () => {
   return (
     <div className={styles.container}>
       <div className={`${styles.toast} ${confirmation ? styles.visible : ""}`}>
-        {confirmation && (
-          <h6>
-            <span>Success</span> Changes saved successfully
-          </h6>
-        )}
+        {confirmation && confirmation}
       </div>
       <div
         className={`${styles.toast} ${errorToast ? styles.ErrorVisible : ""}`}

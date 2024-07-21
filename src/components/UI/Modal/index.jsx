@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import React, { useState, useCallback, useRef } from "react";
-import Cropper, {
+import {
   centerCrop,
   convertToPixelCrop,
   makeAspectCrop,
@@ -19,9 +19,10 @@ const ProfileCrop = ({
   setIsModalOpen,
   onCropComplete,
   handleModal,
-  files,
+  isCropMode,
   setConfirmation,
 }) => {
+  const [loader, setLoader] = useState(false);
   const [crop, setCrop] = useState({
     unit: "%",
     x: 25,
@@ -51,13 +52,63 @@ const ProfileCrop = ({
 
   const handleSave = async () => {
     setCanvasPreview(
-      imgRef.current, // HTMLImageElement
-      previewCanvasRef.current, // HTMLCanvasElement
-      convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
+      imgRef?.current, // HTMLImageElement
+      previewCanvasRef?.current, // HTMLCanvasElement
+      convertToPixelCrop(crop, imgRef?.current?.width, imgRef?.current?.height)
     );
-    const dataUrl = previewCanvasRef.current.toDataURL();
-    onCropComplete(dataUrl);
-    setIsModalOpen(false);
+    const dataUrl = previewCanvasRef?.current?.toDataURL();
+
+    if (isCropMode === "update") {
+      const payload = {
+        name: imageSrc?.file?.name,
+        preview: imageSrc?.preview,
+        size: imageSrc?.file?.size,
+        type: imageSrc?.file?.type,
+      };
+      setLoader(true);
+      try {
+        const response = await fetch(
+          "https://image-uploader-backend-r2pm.onrender.com/api/profile/add",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const result = await response.json();
+        if (result?.sucess === true) {
+          onCropComplete(dataUrl);
+          setIsModalOpen(false);
+          setConfirmation(
+            <h6 style={{ color: "#15803d" }}>
+              <span>Success</span> Changes saved successfully
+            </h6>
+          );
+          setTimeout(() => {
+            setConfirmation("");
+          }, 2000);
+          setLoader(false);
+        }
+      } catch (error) {
+        setIsModalOpen(false);
+        setLoader(false);
+        setConfirmation(
+          <h6 style={{ color: "#dc2626" }}>
+            <span>Error</span> Upload failed. Please retry or contact us if you
+            believe this is a bug.
+          </h6>
+        );
+        setTimeout(() => {
+          setConfirmation("");
+        }, 4000);
+      }
+    } else {
+      onCropComplete(dataUrl);
+      setIsModalOpen(false);
+    }
   };
 
   const handleCancel = () => {
@@ -85,7 +136,7 @@ const ProfileCrop = ({
               minWidth={MIN_DIMENSION}
             >
               <img
-                src={imageSrc}
+                src={imageSrc?.preview}
                 onLoad={onImageLoad}
                 alt="Crop Preview"
                 ref={imgRef}
@@ -103,6 +154,7 @@ const ProfileCrop = ({
             name={"Confirm"}
             variant={"primary"}
             handleModal={handleSave}
+            loader={loader}
           />
         </div>
         {crop && (
