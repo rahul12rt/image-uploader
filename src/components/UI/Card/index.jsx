@@ -24,7 +24,7 @@ const Card = ({ handleModal, profile }) => {
           <div className={styles.occupation}>
             <h2>Senior Product Designer</h2>
             <h2 className={styles.flow}>
-              <span>at</span>
+              <span>&nbsp;at</span>
               <img src="/images/icons/webFlow.svg" alt="Webflow" /> Webflow{" "}
               <div className="dot" />
               <span>He/Him</span>
