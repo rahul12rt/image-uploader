@@ -5,10 +5,10 @@ import PrimaryButton from "../Button/primary";
 const Card = ({ handleModal, profile }) => {
   return (
     <div className={styles.card}>
-      <img className={styles.coverIcon} alt="" src="./images/cover.jpg" />
+      <img className={styles.coverIcon} src="/images/cover.jpg" alt="cover" />
       <div className={styles.info}>
         <div className={styles.avatar}>
-          <img src={profile} alt="Profile Picture" />
+          <img src={profile} alt="avatar" />
         </div>
         <div className={styles.container}>
           <PrimaryButton
@@ -25,10 +25,8 @@ const Card = ({ handleModal, profile }) => {
             <h2>Senior Product Designer</h2>
             <h2 className={styles.flow}>
               <span>at</span>
-              <img
-                src="/images/icons/webFlow.svg"
-                alt="Web Flow"
-              /> Webflow <div className="dot" />
+              <img src="/images/icons/webFlow.svg" alt="Webflow" /> Webflow{" "}
+              <div className="dot" />
               <span>He/Him</span>
             </h2>
           </div>
