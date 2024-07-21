@@ -15,6 +15,18 @@
   background-color: #fff;
 }
 
+.secondary:focus {
+  box-shadow: 0px 0px 0px 4px #444ce71f;
+  border: 1px solid #e5e5e5;
+  outline: none;
+}
+
+.primary:focus {
+  box-shadow: 0px 0px 0px 4px #444ce71f;
+  border: 1px solid #e5e5e5;
+  outline: none;
+}
+
 .secondary:hover {
   background: #fafafa;
   border: 1px solid #e5e5e5 !important;

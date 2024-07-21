@@ -15,6 +15,7 @@
   border-radius: 2000px;
   position: absolute;
   top: 32px;
+  z-index: 1000;
 }
 
 .toast span {
@@ -42,4 +43,16 @@
 .toast.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.toast.ErrorVisible {
+  right: 32px;
+  opacity: 1;
+  transform: translateY(0);
+  background-color: #fef2f2;
+  border-radius: unset;
+}
+
+.toast.ErrorVisible h6 {
+  color: #dc2626 !important;
 }

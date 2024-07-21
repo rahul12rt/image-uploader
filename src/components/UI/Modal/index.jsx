@@ -50,11 +50,6 @@ const ProfileCrop = ({
   }, []);
 
   const handleSave = async () => {
-    if (files.length > 1) {
-      handleModal();
-    } else {
-      setConfirmation(true);
-    }
     setCanvasPreview(
       imgRef.current, // HTMLImageElement
       previewCanvasRef.current, // HTMLCanvasElement
@@ -62,7 +57,6 @@ const ProfileCrop = ({
     );
     const dataUrl = previewCanvasRef.current.toDataURL();
     onCropComplete(dataUrl);
-
     setIsModalOpen(false);
   };
 

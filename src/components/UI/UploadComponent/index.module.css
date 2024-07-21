@@ -46,13 +46,13 @@
 
 .wrap {
   height: 200px;
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
 }
 
 .avatar {
-  width: 80px;
+  width: 94px;
   height: 80px;
   border-radius: 6px;
   overflow: hidden;
@@ -144,6 +144,12 @@
 
 .error {
   color: #dc2626;
+}
+
+.notAllowed {
+  cursor: no-drop;
+  height: 74px;
+  padding-bottom: 10px;
 }
 
 @media only screen and (max-width: 980px) {

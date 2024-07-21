@@ -6,17 +6,24 @@ import Checkbox from "../CheckBox";
 import PrimaryButton from "../Button/primary";
 import ProfileCrop from "../Modal";
 
-const UploadComponent = ({ handleModal, setProfile, setConfirmation }) => {
+const UploadComponent = ({
+  handleModal,
+  setProfile,
+  setConfirmation,
+  setErrorToast,
+}) => {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(false);
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
+  const [isCropMode, setIsCropMode] = useState(false);
 
-  const showModal = (fileSrc, index) => {
+  const showModal = (fileSrc, index, mode) => {
     setImageSrc(fileSrc);
     setSelectedFileIndex(index);
     setIsModalOpen(true);
+    setIsCropMode(mode);
     handleModal();
   };
 
@@ -50,25 +57,33 @@ const UploadComponent = ({ handleModal, setProfile, setConfirmation }) => {
 
   const onDrop = useCallback(
     (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) => ({
-        file,
-        preview: URL.createObjectURL(file),
-        progress: 0,
-        intervalId: null,
-        showSuccess: true,
-      }));
-
       setFiles((prevFiles) => {
+        if (prevFiles.length + acceptedFiles.length > 5) {
+          setErrorToast(true);
+          setTimeout(() => {
+            setErrorToast(false);
+          }, 2000);
+          return prevFiles;
+        }
+
+        const newFiles = acceptedFiles.map((file) => ({
+          file,
+          preview: URL.createObjectURL(file),
+          progress: 0,
+          intervalId: null,
+          showSuccess: true,
+        }));
+
         const updatedFiles = [...prevFiles, ...newFiles];
         newFiles.forEach((_, index) => {
           const fileIndex = prevFiles.length + index;
           const intervalId = simulateProgress(fileIndex);
           updatedFiles[fileIndex].intervalId = intervalId;
         });
+
+        setError(false);
         return updatedFiles;
       });
-
-      setError(false);
     },
     [files]
   );
@@ -113,9 +128,8 @@ const UploadComponent = ({ handleModal, setProfile, setConfirmation }) => {
   };
 
   const handleCropComplete = (croppedImageUrl) => {
-    if (files.length == 1) {
-      setProfile(croppedImageUrl);
-    } else {
+    if (isCropMode == "crop") {
+      handleModal();
       setFiles((prevFiles) => {
         const updatedFiles = [...prevFiles];
         if (selectedFileIndex !== null) {
@@ -123,30 +137,25 @@ const UploadComponent = ({ handleModal, setProfile, setConfirmation }) => {
         }
         return updatedFiles;
       });
+    } else {
+      setProfile(croppedImageUrl);
+      setConfirmation(true);
     }
   };
 
   const isButtonDisabled = selectedFileIndex === null;
 
   const handleSelectImage = () => {
-    if (files.length == 1) {
-      setImageSrc(files[selectedFileIndex].preview);
-      setIsModalOpen(true);
-      handleModal();
-    } else {
-      if (selectedFileIndex !== null) {
-        setProfile(files[selectedFileIndex].preview);
-        setConfirmation(true);
-        handleModal();
-      }
-    }
+    setIsCropMode("update");
+    setImageSrc(files[selectedFileIndex].preview);
+    setIsModalOpen(true);
+    handleModal();
   };
 
   return (
     <>
       <div
-        className={`${styles.container}`}
-        style={{ cursor: error && "not-allowed" }}
+        className={`${styles.container} ${error && styles.notAllowed}`}
         {...getRootProps()}
       >
         <input {...getInputProps()} disabled={error} />
@@ -213,7 +222,9 @@ const UploadComponent = ({ handleModal, setProfile, setConfirmation }) => {
                       <>
                         <div
                           className={styles.cropImage}
-                          onClick={() => showModal(fileObj.preview, index)}
+                          onClick={() =>
+                            showModal(fileObj.preview, index, "crop")
+                          }
                         >
                           <img src="/images/icons/crop.svg" alt="Crop" />
                           <h6>Crop image</h6>

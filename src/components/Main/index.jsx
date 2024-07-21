@@ -7,6 +7,7 @@ const Main = () => {
   const [profile, setProfile] = useState("./images/avatar.jpg");
   const [confirmation, setConfirmation] = useState(false);
   const [open, close] = useState(false);
+  const [errorToast, setErrorToast] = useState(false);
   const handleModal = () => {
     close(!open);
   };
@@ -31,6 +32,11 @@ const Main = () => {
           </h6>
         )}
       </div>
+      <div
+        className={`${styles.toast} ${errorToast ? styles.ErrorVisible : ""}`}
+      >
+        {errorToast && <h6>Error: Upload up to 5 images</h6>}
+      </div>
       <Card handleModal={handleModal} profile={profile} />
       {/* {open && <Upload handleModal={handleModal} open={open} />} */}
       <Upload
@@ -38,6 +44,7 @@ const Main = () => {
         open={open}
         setProfile={setProfile}
         setConfirmation={setConfirmation}
+        setErrorToast={setErrorToast}
       />
     </div>
   );

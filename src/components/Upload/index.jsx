@@ -2,7 +2,13 @@ import React from "react";
 import styles from "./index.module.css";
 import UploadComponent from "../UI/UploadComponent";
 
-const Upload = ({ handleModal, open, setProfile, setConfirmation }) => {
+const Upload = ({
+  handleModal,
+  open,
+  setProfile,
+  setConfirmation,
+  setErrorToast,
+}) => {
   return (
     <>
       <div
@@ -28,6 +34,7 @@ const Upload = ({ handleModal, open, setProfile, setConfirmation }) => {
               handleModal={handleModal}
               setProfile={setProfile}
               setConfirmation={setConfirmation}
+              setErrorToast={setErrorToast}
             />
           </div>
         </div>
